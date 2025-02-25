@@ -11,6 +11,7 @@ import AuthProvider from "./provider/AuthProvider";
 import Login from "./page/Login";
 import SignUp from "./page/SignUp";
 import PrivateRoute from "./routes/PrivateRoute";
+import UpdateTask from "./page/UpdateTask";
 
 const router = createBrowserRouter([
   {
@@ -31,6 +32,14 @@ const router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <AddTask />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "updateTask/:id",
+        element: (
+          <PrivateRoute>
+            <UpdateTask></UpdateTask>
           </PrivateRoute>
         ),
       },

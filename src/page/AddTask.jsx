@@ -1,5 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Swal from "sweetalert2";
 
 const AddTask = () => {
   const [title, setTitle] = useState("");
@@ -10,21 +13,61 @@ const AddTask = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (title.length > 50) {
+      toast.error("Title must be within 50 characters!");
+      return;
+    }
+    if (description.length > 200) {
+      toast.error("Description must be within 200 characters!");
+      return;
+    }
+
     const newTask = {
       title,
       description,
       category,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toLocaleString("en-GB", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+      }).replace(",", ""),
     };
 
-    // Call API to add task (assuming you have an API endpoint for this)
-    await fetch("/tasks", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newTask),
-    });
+    try {
+      const response = await fetch("http://localhost:5000/tasks", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newTask),
+      });
 
-    navigate("/manage-task"); // Redirect to manage tasks
+      if (response.ok) {
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          },
+        });
+        Toast.fire({
+          icon: "success",
+          title: "🎉 Task Added Successfully!",
+        });
+        navigate(location?.state ? location.state : "/");
+        console.log(location.state);
+      } else {
+        throw new Error("Failed to add task");
+      }
+    } catch (error) {
+      
+      toast.error("❌ Something went wrong!");
+    }
   };
 
   return (
