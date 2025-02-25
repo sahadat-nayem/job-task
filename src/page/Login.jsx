@@ -1,3 +1,12 @@
+import { useContext, useState } from "react";
+import { AuthContext } from "../provider/AuthProvider";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import loginLottieData from '../../src/assets/Login - 1734906953737.json';
+import Swal from "sweetalert2";
+import Lottie from "lottie-react";
+import { FaEye, FaEyeSlash } from "react-icons/fa6";
+import SocialLogin from "./SocialLogin";
+
 const Login = () => {
   const [error, setError] = useState({});
   const navigate = useNavigate();

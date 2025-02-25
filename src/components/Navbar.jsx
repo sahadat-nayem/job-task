@@ -1,16 +1,30 @@
-
+import { useContext } from "react";
 import { IoIosAddCircle } from "react-icons/io";
 import { IoHome } from "react-icons/io5";
 import { NavLink } from "react-router-dom";
+import { AuthContext } from "../provider/AuthProvider";
+import userIcon from "../assets/user-removebg-preview.png";
 
 const Navbar = () => {
+  const { user, signOutUser } = useContext(AuthContext);
+
+  const handleSignOut = () => {
+    signOutUser()
+      .then(() => {
+        console.log("successful sign out");
+      })
+      .catch((error) => {
+        console.log("failed to sign out .stay here. dont leave me alone");
+      });
+  };
+
   const links = (
     <>
       <NavLink
         to="/"
         className={({ isActive }) =>
           `font-semibold flex gap-1 items-center px-3 py-2 rounded-md ${
-            isActive ? "bg-black text-white" : "text-black"
+            isActive ? "glass bg-black text-white" : "text-black"
           }`
         }
       >
@@ -21,7 +35,7 @@ const Navbar = () => {
         to="/addTask"
         className={({ isActive }) =>
           `font-semibold flex gap-1 items-center px-3 py-2 rounded-md ${
-            isActive ? "bg-black text-white" : "text-black"
+            isActive ? "glass bg-black text-white" : "text-black"
           }`
         }
       >
@@ -67,39 +81,39 @@ const Navbar = () => {
           <ul className="menu menu-horizontal px-1 gap-7">{links}</ul>
         </div>
 
-        {/* {user && user?.email ? (
-            <button
-              onClick={logOut}
-              className="hover:text-yellow-400 font-semibold"
-            >
-              Log Out
-            </button>
+        {user && user?.email ? (
+          <button
+            onClick={handleSignOut}
+            className="bg-red-500 glass text-white px-4 py-2 rounded hover:bg-red-700 font-semibold"
+          >
+            Log Out
+          </button>
+        ) : (
+          <NavLink
+            to="/login"
+            className="bg-green-500 glass text-white px-4 py-2 rounded hover:bg-green-700 font-semibold"
+          >
+            Login
+          </NavLink>
+        )}
+        <div className="">
+          {user && user?.email ? (
+            <div className="group relative">
+              <img
+                className="size-12 rounded-full border-2 border-blue-900 transition-all duration-300"
+                src={user?.photoURL}
+                alt=""
+              />
+              <span className="absolute left-1/2 top-full mt-2 -translate-x-1/2 rounded bg-black text-white px-4 py-2 font-semibold text-sm opacity-0 transition-opacity duration-300 group-hover:opacity-100 z-20">
+                {user?.displayName}
+              </span>
+            </div>
           ) : (
-            <NavLink
-              to="/login"
-              className="hover:text-yellow-400 font-semibold pr-5"
-            >
-              Login
-            </NavLink>
+            <div>
+              <img className="size-10" src={userIcon} />
+            </div>
           )}
-          <div className="">
-            {user && user?.email ? (
-              <div className="group relative lg:hidden">
-                <img
-                  className="size-12 rounded-full  border-2 to-blue-900"
-                  src={user?.photoURL}
-                  alt=""
-                />
-                <span className="absolute bottom-0 left-0 right-0 font-semibold bg-gray-100 text-black text-center opacity-0 group-hover:opacity-100  ">
-                  {user?.displayName}
-                </span>
-              </div>
-            ) : (
-              <div>
-                <img className="size-10" src={userIcon} />
-              </div>
-            )}
-          </div> */}
+        </div>
       </div>
     </div>
   );

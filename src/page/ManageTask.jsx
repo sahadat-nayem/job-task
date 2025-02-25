@@ -39,7 +39,7 @@ const ManageTask = () => {
               .map((task, index) => (
                 <div
                   key={index}
-                  className="bg-black border-2 border-white p-4 rounded-md shadow-md mb-3"
+                  className="bg-black glass  p-4 rounded-md shadow-md mb-3"
                 >
                   <h3 className="font-medium text-white">{task.title}</h3>
                   <p className="text-sm text-white">{task.description}</p>
